@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 
+import { useDispatch } from 'react-redux'
+
 const NewBlog = ({ doCreate }) => {
+  const dispatch = useDispatch()
+
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
@@ -19,7 +23,12 @@ const NewBlog = ({ doCreate }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    doCreate({ title, url, author })
+    const newBlog = {
+      title: title,
+      url: url,
+      author: author,
+    }
+    doCreate(newBlog)
     setAuthor('')
     setTitle('')
     setUrl('')
