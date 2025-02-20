@@ -1,9 +1,11 @@
+import { useSelector } from 'react-redux'
+
 const Notification = ({ notification }) => {
   if (!notification) {
     return null
   }
 
-  const { message, type } = notification
+  const { message, type = 'success' } = notification
 
   const style = {
     backgroundColor: 'lightgrey',
