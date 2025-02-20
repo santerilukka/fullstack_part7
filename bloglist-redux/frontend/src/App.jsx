@@ -14,7 +14,12 @@ import { setNotification, notify } from './reducers/notificationReducer'
 
 import blogReducer from './reducers/blogReducer'
 import { setBlogs, addBlog } from './reducers/blogReducer'
-import { initializeBlogs } from './reducers/blogReducer'
+import {
+  initializeBlogs,
+  createBlog,
+  deleteBlog,
+  updateBlog,
+} from './reducers/blogReducer'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -48,25 +53,15 @@ const App = () => {
   }
 
   const handleCreate = async (blog) => {
-    try {
-      blogFormRef.current.toggleVisibility()
-      const newBlog = await blogService.create(blog)
-      dispatch(addBlog(newBlog))
-      dispatch(notify(`A new blog ${newBlog.title} by ${newBlog.author} added`))
-    } catch (error) {
-      dispatch(notify('Failed to create new blog', 'error'))
-    }
+    dispatch(createBlog(blog))
+    blogFormRef.current.toggleVisibility()
+    dispatch(notify(`A new blog ${blog.title} by ${blog.author} added`))
   }
 
   const handleVote = async (blog) => {
-    console.log('updating', blog)
-    const updatedBlog = await blogService.update(blog.id, {
-      ...blog,
-      likes: blog.likes + 1,
-    })
-
-    dispatch(notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`))
-    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)))
+    dispatch(updateBlog(blog))
+    dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
+    setBlogs(blogs.map((b) => (b.id === blog.id ? blog : b)))
   }
 
   const handleLogout = () => {
@@ -76,10 +71,9 @@ const App = () => {
   }
 
   const handleDelete = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(blog.id)
-      setBlogs(blogs.filter((b) => b.id !== blog.id))
-      dispatch(notify(`Blog ${blog.title}, by ${blog.author} removed`))
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      dispatch(deleteBlog(blog))
+      dispatch(notify(`Blog ${blog.title} by ${blog.author} removed`))
     }
   }
 
