@@ -21,6 +21,9 @@ import {
   updateBlog,
 } from './reducers/blogReducer'
 
+import userReducer from './reducers/userReducer'
+import { setUser, clearUser, login, logout } from './reducers/userReducer'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
@@ -44,10 +47,10 @@ const App = () => {
   const handleLogin = async (credentials) => {
     try {
       const user = await loginService.login(credentials)
-      setUser(user)
       storage.saveUser(user)
-      dispatch(notify(`Welcome back, ${user.name}`))
-    } catch (error) {
+      setUser(user)
+      dispatch(notify(`Welcome, ${user.name}!`))
+    } catch (exception) {
       dispatch(notify('Wrong credentials', 'error'))
     }
   }
@@ -65,9 +68,10 @@ const App = () => {
   }
 
   const handleLogout = () => {
+    dispatch(logout())
     setUser(null)
-    storage.removeUser()
-    dispatch(notify(`Bye, ${user.name}!`))
+    dispatch(clearUser())
+    dispatch(notify('Logged out'))
   }
 
   const handleDelete = async (blog) => {
