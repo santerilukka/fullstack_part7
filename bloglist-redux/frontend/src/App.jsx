@@ -12,16 +12,20 @@ import Togglable from './components/Togglable'
 import notificationReducer from './reducers/notificationReducer'
 import { setNotification, notify } from './reducers/notificationReducer'
 
+import blogReducer from './reducers/blogReducer'
+import { setBlogs, addBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector((state) => state.blogs)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const user = storage.loadUser()
@@ -44,10 +48,14 @@ const App = () => {
   }
 
   const handleCreate = async (blog) => {
-    const newBlog = await blogService.create(blog)
-    setBlogs(blogs.concat(newBlog))
-    dispatch(notify(`Blog created: ${newBlog.title}, ${newBlog.author}`))
-    blogFormRef.current.toggleVisibility()
+    try {
+      blogFormRef.current.toggleVisibility()
+      const newBlog = await blogService.create(blog)
+      dispatch(addBlog(newBlog))
+      dispatch(notify(`A new blog ${newBlog.title} by ${newBlog.author} added`))
+    } catch (error) {
+      dispatch(notify('Failed to create new blog', 'error'))
+    }
   }
 
   const handleVote = async (blog) => {
@@ -98,14 +106,17 @@ const App = () => {
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <NewBlog doCreate={handleCreate} />
       </Togglable>
-      {blogs.sort(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleVote={handleVote}
-          handleDelete={handleDelete}
-        />
-      ))}
+      {blogs
+        .slice()
+        .sort(byLikes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleVote={handleVote}
+            handleDelete={handleDelete}
+          />
+        ))}
     </div>
   )
 }
