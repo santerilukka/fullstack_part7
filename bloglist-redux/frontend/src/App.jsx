@@ -36,11 +36,13 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 import Users from './components/Users'
 import Blogs from './components/Blogs'
+import User from './components/User'
 
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
+  const users = useSelector((state) => state.users)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -54,32 +56,12 @@ const App = () => {
   }, [dispatch])
 
   const blogFormRef = createRef()
-
-  const handleCreate = async (blog) => {
-    dispatch(createBlog(blog))
-    blogFormRef.current.toggleVisibility()
-    dispatch(notify(`A new blog ${blog.title} by ${blog.author} added`))
-  }
-
-  const handleVote = async (blog) => {
-    dispatch(updateBlog(blog))
-    dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
-    setBlogs(blogs.map((b) => (b.id === blog.id ? blog : b)))
-  }
-
   const handleLogout = () => {
     try {
       dispatch(logout())
       dispatch(notify('Logged out', 'success'))
     } catch (exception) {
       dispatch(notify('Error logging out', 'error'))
-    }
-  }
-
-  const handleDelete = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      dispatch(deleteBlog(blog))
-      dispatch(notify(`Blog ${blog.title} by ${blog.author} removed`))
     }
   }
 
@@ -109,9 +91,6 @@ const App = () => {
           element={
             <Blogs
               blogs={blogs}
-              handleVote={handleVote}
-              handleDelete={handleDelete}
-              handleCreate={handleCreate}
               blogFormRef={blogFormRef}
               user={user}
               handleLogout={handleLogout}
@@ -119,6 +98,7 @@ const App = () => {
           }
         />
         <Route path='/users' element={<Users />} />
+        <Route path='/users/:id' element={<User users={users} />} />
       </Routes>
     </Router>
   )
