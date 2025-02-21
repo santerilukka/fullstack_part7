@@ -32,6 +32,11 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux'
 
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+
+import Users from './components/Users'
+import Blogs from './components/Blogs'
+
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
@@ -91,28 +96,31 @@ const App = () => {
   const byLikes = (a, b) => b.likes - a.likes
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
+    <Router>
       <div>
-        {user.name} logged in
+        <Link to='/'>blogs</Link>
+        <Link to='/users'>users</Link>
+        <span>{user.name} logged in</span>
         <button onClick={handleLogout}>logout</button>
       </div>
-      <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-        <NewBlog doCreate={handleCreate} />
-      </Togglable>
-      {blogs
-        .slice()
-        .sort(byLikes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleVote={handleVote}
-            handleDelete={handleDelete}
-          />
-        ))}
-    </div>
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <Blogs
+              blogs={blogs}
+              handleVote={handleVote}
+              handleDelete={handleDelete}
+              handleCreate={handleCreate}
+              blogFormRef={blogFormRef}
+              user={user}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route path='/users' element={<Users />} />
+      </Routes>
+    </Router>
   )
 }
 

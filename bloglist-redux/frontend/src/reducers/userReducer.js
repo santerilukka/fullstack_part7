@@ -20,7 +20,6 @@ const userSlice = createSlice({
 export const { setUser, clearUser } = userSlice.actions
 
 export const login = (credentials) => {
-  console.log('credentials', credentials)
   return async (dispatch) => {
     try {
       const user = await loginService.login(credentials)
@@ -34,7 +33,6 @@ export const login = (credentials) => {
 }
 
 export const logout = () => {
-  console.log('logout')
   return async (dispatch) => {
     window.localStorage.removeItem('loggedBlogappUser')
     dispatch(clearUser())
@@ -42,7 +40,6 @@ export const logout = () => {
 }
 
 export const setUserFromStorage = (json) => {
-  console.log('setUserFromStorage', json)
   return (dispatch) => {
     const user = JSON.parse(json)
     blogService.setToken(user.token)
