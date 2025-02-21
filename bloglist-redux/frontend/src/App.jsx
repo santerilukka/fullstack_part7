@@ -78,13 +78,28 @@ const App = () => {
 
   const byLikes = (a, b) => b.likes - a.likes
 
+  const padding = {
+    padding: 5,
+  }
+
+  const colour = {
+    backgroundColor: 'lightgrey',
+    padding: 5,
+  }
+
   return (
     <Router>
-      <div>
-        <Link to='/'>blogs</Link>
-        <Link to='/users'>users</Link>
-        <span>{user.name} logged in</span>
-        <button onClick={handleLogout}>logout</button>
+      <div style={colour}>
+        <Link style={padding} to='/'>
+          blogs
+        </Link>
+        <Link style={padding} to='/users'>
+          users
+        </Link>
+        <span style={padding}>{user.name} logged in</span>
+        <button style={padding} onClick={handleLogout}>
+          logout
+        </button>
       </div>
       <Routes>
         <Route
