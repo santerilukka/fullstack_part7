@@ -20,18 +20,36 @@ const userSlice = createSlice({
 export const { setUser, clearUser } = userSlice.actions
 
 export const login = (credentials) => {
+  console.log('credentials', credentials)
   return async (dispatch) => {
-    const user = await loginService.login(credentials)
-    storage.saveUser(user)
-    dispatch(setUser(user))
+    try {
+      const user = await loginService.login(credentials)
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      dispatch(setUser(user))
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 
 export const logout = () => {
+  console.log('logout')
   return async (dispatch) => {
-    storage.removeUser() // Change this line
+    window.localStorage.removeItem('loggedBlogappUser')
     dispatch(clearUser())
   }
 }
 
-export default userSlice.reducer
+export const setUserFromStorage = (json) => {
+  console.log('setUserFromStorage', json)
+  return (dispatch) => {
+    const user = JSON.parse(json)
+    blogService.setToken(user.token)
+    dispatch(setUser(user))
+  }
+}
+
+const userReducer = userSlice.reducer
+
+export default userReducer

@@ -3,6 +3,12 @@ import storage from './storage'
 
 const baseUrl = '/api/blogs'
 
+let token = null
+
+const setToken = (newToken) => {
+  token = `Bearer ${newToken}`
+}
+
 const getConfit = () => ({
   headers: { Authorization: `Bearer ${storage.loadUser().token}` },
 })
@@ -27,4 +33,4 @@ const remove = async (id) => {
   return response.data
 }
 
-export default { getAll, create, update, remove }
+export default { getAll, create, update, remove, setToken }
