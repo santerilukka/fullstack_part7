@@ -10,6 +10,22 @@ router.get('/', async (request, response) => {
   response.json(blogs)
 })
 
+router.get('/:id', async (request, response) => {
+  try {
+    const blog = await Blog.findById(request.params.id).populate('user', {
+      username: 1,
+      name: 1,
+    })
+    if (blog) {
+      response.json(blog)
+    } else {
+      response.status(404).json({ error: 'Blog not found' })
+    }
+  } catch (error) {
+    response.status(500).json({ error: 'Something went wrong' })
+  }
+})
+
 router.post('/', userExtractor, async (request, response) => {
   const blog = new Blog(request.body)
 

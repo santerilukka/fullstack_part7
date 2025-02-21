@@ -37,6 +37,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Users from './components/Users'
 import Blogs from './components/Blogs'
 import User from './components/User'
+import BlogDetail from './components/BlogDetail'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -99,6 +100,7 @@ const App = () => {
         />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User users={users} />} />
+        <Route path='/blogs/:id' element={<BlogDetail />} />{' '}
       </Routes>
     </Router>
   )
