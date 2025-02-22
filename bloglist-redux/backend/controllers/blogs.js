@@ -2,20 +2,22 @@ const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const userExtractor = require('../utils/middleware').userExtractor
 
 router.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1, id: 1 })
 
   response.json(blogs)
 })
 
 router.get('/:id', async (request, response) => {
   try {
-    const blog = await Blog.findById(request.params.id).populate('user', {
-      username: 1,
-      name: 1,
-    })
+    const blog = await Blog.findById(request.params.id)
+      .populate('user', { username: 1, name: 1 })
+      .populate('comments', { content: 1, id: 1 })
     if (blog) {
       response.json(blog)
     } else {
@@ -39,7 +41,7 @@ router.post('/', userExtractor, async (request, response) => {
     return response.status(400).json({ error: 'title or url missing' })
   }
 
-  blog.likes = blog.likes | 0
+  blog.likes = blog.likes || 0
   blog.user = user
   user.blogs = user.blogs.concat(blog._id)
 

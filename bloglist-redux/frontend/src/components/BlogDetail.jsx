@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import blogService from '../services/blogs'
+import commentsService from '../services/comments'
+import Comments from './Comments'
 
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null)
+  const [comments, setComments] = useState([])
   const { id } = useParams()
 
   useEffect(() => {
@@ -18,6 +21,18 @@ const BlogDetail = () => {
     fetchBlog()
   }, [id])
 
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const fetchedComments = await commentsService.getAll(id)
+        setComments(fetchedComments)
+      } catch (error) {
+        console.error('Error fetching comments:', error)
+      }
+    }
+    fetchComments()
+  }, [id])
+
   if (!blog) {
     return <div>Blog not found</div>
   }
@@ -30,6 +45,7 @@ const BlogDetail = () => {
         URL: <a href={blog.url}>{blog.url}</a>
       </p>
       <p>Likes: {blog.likes}</p>
+      <Comments comments={comments} blogId={blog.id} />
     </div>
   )
 }

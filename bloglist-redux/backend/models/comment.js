@@ -1,20 +1,15 @@
 const mongoose = require('mongoose')
 
 const schema = mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number,
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  content: {
+    type: String,
+    required: true,
   },
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Comment',
-    },
-  ],
+  blog: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Blog',
+    required: true,
+  },
 })
 
 schema.set('toJSON', {
@@ -25,4 +20,4 @@ schema.set('toJSON', {
   },
 })
 
-module.exports = mongoose.model('Blog', schema)
+module.exports = mongoose.model('Comment', schema)
