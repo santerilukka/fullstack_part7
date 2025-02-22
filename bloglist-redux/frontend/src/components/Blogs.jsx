@@ -5,8 +5,10 @@ import NewBlog from './NewBlog'
 import Togglable from './Togglable'
 import Notification from './Notification'
 
-import { createBlog, updateBlog, deleteBlog } from '../reducers/blogReducer'
+import { createBlog, likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { notify } from '../reducers/notificationReducer'
+
+import { Button, Table } from 'react-bootstrap'
 
 const Blogs = ({ blogs, blogFormRef, user, handleLogout }) => {
   const dispatch = useDispatch()
@@ -17,9 +19,8 @@ const Blogs = ({ blogs, blogFormRef, user, handleLogout }) => {
     dispatch(notify(`A new blog ${blog.title} by ${blog.author} added`))
   }
 
-  const handleVote = async (blog) => {
-    dispatch(updateBlog(blog))
-    dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
+  const handleVote = (blog) => {
+    dispatch(likeBlog(blog))
   }
 
   const handleDelete = async (blog) => {
@@ -37,22 +38,51 @@ const Blogs = ({ blogs, blogFormRef, user, handleLogout }) => {
       <Notification />
       <div>
         {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
+        <Button variant='secondary' onClick={handleLogout}>
+          logout
+        </Button>
       </div>
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <NewBlog doCreate={handleCreate} />
       </Togglable>
-      {blogs
-        .slice()
-        .sort(byLikes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleVote={handleVote}
-            handleDelete={handleDelete}
-          />
-        ))}
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Likes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {blogs
+            .slice()
+            .sort(byLikes)
+            .map((blog) => (
+              <tr key={blog.id}>
+                <td>
+                  <Blog
+                    blog={blog}
+                    handleVote={handleVote}
+                    handleDelete={handleDelete}
+                  />
+                </td>
+                <td>{blog.author}</td>
+                <td>{blog.likes}</td>
+                <td>
+                  <Button variant='primary' onClick={() => handleVote(blog)}>
+                    like
+                  </Button>
+                  {blog.user && blog.user.username === user.username && (
+                    <Button variant='danger' onClick={() => handleDelete(blog)}>
+                      remove
+                    </Button>
+                  )}
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
     </div>
   )
 }

@@ -88,36 +88,38 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div style={colour}>
-        <Link style={padding} to='/'>
-          blogs
-        </Link>
-        <Link style={padding} to='/users'>
-          users
-        </Link>
-        <span style={padding}>{user.name} logged in</span>
-        <button style={padding} onClick={handleLogout}>
-          logout
-        </button>
-      </div>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <Blogs
-              blogs={blogs}
-              blogFormRef={blogFormRef}
-              user={user}
-              handleLogout={handleLogout}
-            />
-          }
-        />
-        <Route path='/users' element={<Users />} />
-        <Route path='/users/:id' element={<User users={users} />} />
-        <Route path='/blogs/:id' element={<BlogDetail />} />{' '}
-      </Routes>
-    </Router>
+    <div className='container'>
+      <Router>
+        <div style={colour}>
+          <Link style={padding} to='/'>
+            blogs
+          </Link>
+          <Link style={padding} to='/users'>
+            users
+          </Link>
+          <span style={padding}>{user.name} logged in</span>
+          <button style={padding} onClick={handleLogout}>
+            logout
+          </button>
+        </div>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <Blogs
+                blogs={blogs}
+                blogFormRef={blogFormRef}
+                user={user}
+                handleLogout={handleLogout}
+              />
+            }
+          />
+          <Route path='/users' element={<Users />} />
+          <Route path='/users/:id' element={<User users={users} />} />
+          <Route path='/blogs/:id' element={<BlogDetail />} />{' '}
+        </Routes>
+      </Router>
+    </div>
   )
 }
 
