@@ -39,6 +39,9 @@ import Blogs from './components/Blogs'
 import User from './components/User'
 import BlogDetail from './components/BlogDetail'
 
+import { Navbar, Nav, Button, Container } from 'react-bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
@@ -88,20 +91,32 @@ const App = () => {
   }
 
   return (
-    <div className='container'>
+    <Container>
       <Router>
-        <div style={colour}>
-          <Link style={padding} to='/'>
-            blogs
-          </Link>
-          <Link style={padding} to='/users'>
-            users
-          </Link>
-          <span style={padding}>{user.name} logged in</span>
-          <button style={padding} onClick={handleLogout}>
-            logout
-          </button>
-        </div>
+        <Navbar bg='light' expand='lg'>
+          <Navbar.Brand as={Link} to='/'>
+            <strong>Blog App</strong>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
+            <Nav className='me-auto'>
+              <Nav.Link as={Link} to='/'>
+                Blogs
+              </Nav.Link>
+              <Nav.Link as={Link} to='/users'>
+                Users
+              </Nav.Link>
+            </Nav>
+            <Nav>
+              <Navbar.Text className='me-2'>
+                <strong>{user.name} logged in</strong>
+              </Navbar.Text>{' '}
+              <Button variant='outline-danger' onClick={handleLogout}>
+                Logout
+              </Button>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
         <Routes>
           <Route
             path='/'
@@ -116,10 +131,10 @@ const App = () => {
           />
           <Route path='/users' element={<Users />} />
           <Route path='/users/:id' element={<User users={users} />} />
-          <Route path='/blogs/:id' element={<BlogDetail />} />{' '}
+          <Route path='/blogs/:id' element={<BlogDetail />} />
         </Routes>
       </Router>
-    </div>
+    </Container>
   )
 }
 

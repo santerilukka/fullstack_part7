@@ -32,13 +32,21 @@ const Blogs = ({ blogs, blogFormRef, user, handleLogout }) => {
 
   const byLikes = (a, b) => b.likes - a.likes
 
+  const buttonStyle = {
+    margin: '0 0 0 10px',
+  }
+
+  const topMargin = {
+    marginTop: 10,
+  }
+
   return (
     <div>
       <h2>blogs</h2>
       <Notification />
       <div>
         {user.name} logged in
-        <Button variant='secondary' onClick={handleLogout}>
+        <Button style={buttonStyle} variant='secondary' onClick={handleLogout}>
           logout
         </Button>
       </div>
@@ -74,7 +82,11 @@ const Blogs = ({ blogs, blogFormRef, user, handleLogout }) => {
                     like
                   </Button>
                   {blog.user && blog.user.username === user.username && (
-                    <Button variant='danger' onClick={() => handleDelete(blog)}>
+                    <Button
+                      style={topMargin}
+                      variant='danger'
+                      onClick={() => handleDelete(blog)}
+                    >
                       remove
                     </Button>
                   )}

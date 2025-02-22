@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { Card, ListGroup, Spinner, Container, Row, Col } from 'react-bootstrap'
 import usersService from '../services/users'
 
 const User = () => {
@@ -16,19 +17,38 @@ const User = () => {
   }, [id])
 
   if (!user) {
-    return null
+    return (
+      <Container
+        className='d-flex justify-content-center align-items-center'
+        style={{ height: '100vh' }}
+      >
+        <Spinner animation='border' role='status'>
+          <span className='visually-hidden'>Loading...</span>
+        </Spinner>
+      </Container>
+    )
   }
 
   return (
-    <div>
-      <h2>{user.username}</h2>
-      <h3>Added blogs</h3>
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
-        ))}
-      </ul>
-    </div>
+    <Container>
+      <Row className='justify-content-center'>
+        <Col md={8}>
+          <Card className='mt-5'>
+            <Card.Body>
+              <Card.Title>{user.username}</Card.Title>
+              <Card.Subtitle className='mb-2 text-muted'>
+                Added blogs
+              </Card.Subtitle>
+              <ListGroup variant='flush'>
+                {user.blogs.map((blog) => (
+                  <ListGroup.Item key={blog.id}>{blog.title}</ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   )
 }
 

@@ -1,5 +1,14 @@
-import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  ListGroup,
+  Form,
+} from 'react-bootstrap'
 import blogService from '../services/blogs'
 import commentsService from '../services/comments'
 import Comments from './Comments'
@@ -42,19 +51,29 @@ const BlogDetail = () => {
   }
 
   return (
-    <div>
-      <h2>{blog.title}</h2>
-      <p>Author: {blog.author}</p>
-      <p>
-        URL: <a href={blog.url}>{blog.url}</a>
-      </p>
-      <p>Likes: {blog.likes}</p>
-      <Comments
-        comments={comments}
-        blogId={blog.id}
-        onNewComment={handleNewComment}
-      />
-    </div>
+    <Container>
+      <Row className='justify-content-center'>
+        <Col md={8}>
+          <Card className='mt-5'>
+            <Card.Body>
+              <Card.Title>{blog.title}</Card.Title>
+              <Card.Subtitle className='mb-2 text-muted'>
+                Author: {blog.author}
+              </Card.Subtitle>
+              <Card.Text>
+                URL: <a href={blog.url}>{blog.url}</a>
+              </Card.Text>
+              <Card.Text>Likes: {blog.likes}</Card.Text>
+              <Comments
+                comments={comments}
+                blogId={blog.id}
+                onNewComment={handleNewComment}
+              />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   )
 }
 

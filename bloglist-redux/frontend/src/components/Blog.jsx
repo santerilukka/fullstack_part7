@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import storage from '../services/storage'
+import { Button } from 'react-bootstrap'
 
 const Blog = ({ blog, handleVote, handleDelete }) => {
   if (!blog) {
@@ -23,12 +24,20 @@ const Blog = ({ blog, handleVote, handleDelete }) => {
       <Link to={`/blogs/${blog.id}`}>{blog.title}</Link> by {blog.author}
       <div>
         likes {blog.likes}
-        <button style={{ marginLeft: 3 }} onClick={() => handleVote(blog)}>
+        <Button
+          variant='primary'
+          style={{ marginLeft: 3 }}
+          onClick={() => handleVote(blog)}
+        >
           like
-        </button>
+        </Button>
       </div>
       <div>{nameOfUser}</div>
-      {canRemove && <button onClick={() => handleDelete(blog)}>remove</button>}
+      {canRemove && (
+        <Button variant='danger' onClick={() => handleDelete(blog)}>
+          remove
+        </Button>
+      )}
     </div>
   )
 }
