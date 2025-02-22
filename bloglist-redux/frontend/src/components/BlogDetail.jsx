@@ -33,6 +33,10 @@ const BlogDetail = () => {
     fetchComments()
   }, [id])
 
+  const handleNewComment = (newComment) => {
+    setComments(comments.concat(newComment))
+  }
+
   if (!blog) {
     return <div>Blog not found</div>
   }
@@ -45,7 +49,11 @@ const BlogDetail = () => {
         URL: <a href={blog.url}>{blog.url}</a>
       </p>
       <p>Likes: {blog.likes}</p>
-      <Comments comments={comments} blogId={blog.id} />
+      <Comments
+        comments={comments}
+        blogId={blog.id}
+        onNewComment={handleNewComment}
+      />
     </div>
   )
 }

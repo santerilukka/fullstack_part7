@@ -3,14 +3,15 @@ import { useDispatch } from 'react-redux'
 import { addCommentToBlog } from '../reducers/blogReducer'
 import { Form, Button } from 'react-bootstrap'
 
-const Comments = ({ comments, blogId }) => {
+const Comments = ({ comments, blogId, onNewComment }) => {
   const dispatch = useDispatch()
 
-  const handleComment = (event) => {
+  const handleComment = async (event) => {
     event.preventDefault()
     const content = event.target.comment.value
     event.target.comment.value = ''
-    dispatch(addCommentToBlog(blogId, content))
+    const newComment = await dispatch(addCommentToBlog(blogId, content))
+    onNewComment(newComment)
   }
 
   return (

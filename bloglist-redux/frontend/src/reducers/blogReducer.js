@@ -68,6 +68,7 @@ export const addCommentToBlog = (blogId, content) => {
   return async (dispatch) => {
     const comment = await commentsService.create(blogId, content)
     dispatch(addComment({ blogId, comment }))
+    return comment
   }
 }
 
