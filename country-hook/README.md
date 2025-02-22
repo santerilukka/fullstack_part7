@@ -1,20 +1,17 @@
-# Routed Anecdotes
+# Country Hook
 
-Routed Anecdotes is a React application that uses React Router for navigation and displays a list of anecdotes.
+Country Hook is a React application that uses custom hooks to fetch and display information about countries.
 
 ## Features
 
-- Display a list of anecdotes
-- View details of each anecdote
-- Create new anecdotes
-- Navigation using React Router
+- Search for a country by name
+- Display country details including capital, population, and flag
 
 ## Technologies Used
 
 - React: For building the user interface
-- React Router: For navigation
+- Axios: For making HTTP requests
 - Vite: For development server and build tool
-- Prettier: For code formatting
 
 ## Getting Started
 
@@ -28,7 +25,7 @@ Routed Anecdotes is a React application that uses React Router for navigation an
 1. Clone the repository:
    ```sh
    git clone https://github.com/santerilukka/fullstack_part7.git
-   cd full-stack-open-part7/routed-anecdotes
+   cd full-stack-open-part7/country-hook
    ```
 2. Install dependencies:
    ```sh
